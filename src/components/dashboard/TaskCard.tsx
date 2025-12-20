@@ -1,4 +1,4 @@
-import { Task } from "@/types";
+import { FirestoreTask } from "@/types/firestore";
 import { cn } from "@/lib/utils";
 import { Check, MoreHorizontal, Repeat, Clock, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,9 @@ import {
 import { format, isToday, isTomorrow, isPast, parseISO } from "date-fns";
 
 interface TaskCardProps {
-  task: Task;
+  task: FirestoreTask;
   onComplete: (taskId: string) => void;
-  onEdit: (task: Task) => void;
+  onEdit: (task: FirestoreTask) => void;
   onDelete: (taskId: string) => void;
 }
 

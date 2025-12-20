@@ -96,15 +96,18 @@ export function NotificationsDialog({ open, onOpenChange }: NotificationsDialogP
   const handleAcceptRoom = async (requestId: string, userName: string, roomName: string) => {
     setLoading(requestId);
     try {
+      console.log('Accepting room join request:', requestId);
       await acceptRoomJoinRequest(requestId);
+      console.log('Room join request accepted successfully');
       toast({
         title: 'Request accepted',
         description: `${userName} has been added to ${roomName}`,
       });
     } catch (error) {
+      console.error('Error accepting room join request:', error);
       toast({
         title: 'Error',
-        description: 'Failed to accept join request',
+        description: error instanceof Error ? error.message : 'Failed to accept join request',
         variant: 'destructive',
       });
     } finally {

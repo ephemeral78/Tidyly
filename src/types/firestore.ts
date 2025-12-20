@@ -16,7 +16,7 @@ export interface FirestoreRoom {
   id: string;
   name: string;
   emoji: string;
-  description?: string;
+  description: string;
   ownerId: string;
   inviteCode: string; // Unique code for room invitations
   members: string[]; // Array of member UIDs

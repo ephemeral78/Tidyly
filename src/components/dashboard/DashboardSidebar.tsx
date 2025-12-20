@@ -24,12 +24,15 @@ import {
   LogOut,
   ChevronRight,
   Activity,
+  UserCheck,
+  Info,
 } from "lucide-react";
-import { Room } from "@/types";
+import { FirestoreRoom } from "@/types/firestore";
 import { cn } from "@/lib/utils";
+import { RoomInfoDialog } from "@/components/social/RoomInfoDialog";
 
 interface DashboardSidebarProps {
-  rooms: Room[];
+  rooms: FirestoreRoom[];
   selectedRoomId: string | null;
   onSelectRoom: (roomId: string | null) => void;
   onCreateRoom: () => void;
@@ -38,6 +41,7 @@ interface DashboardSidebarProps {
 const navItems = [
   { title: "All Tasks", icon: Home, path: "/dashboard" },
   { title: "Activity", icon: Activity, path: "/dashboard/activity" },
+  { title: "Friends", icon: UserCheck, path: "/dashboard/friends" },
   { title: "Calendar", icon: Calendar, path: "/dashboard/calendar" },
   { title: "Analytics", icon: BarChart3, path: "/dashboard/analytics" },
 ];
@@ -51,6 +55,14 @@ export function DashboardSidebar({
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
+  const [roomInfoOpen, setRoomInfoOpen] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState<FirestoreRoom | null>(null);
+
+  const handleRoomInfo = (room: FirestoreRoom, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedRoom(room);
+    setRoomInfoOpen(true);
+  };
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border">
@@ -112,19 +124,32 @@ export function DashboardSidebar({
             <SidebarMenu>
               {rooms.map((room) => (
                 <SidebarMenuItem key={room.id}>
-                  <SidebarMenuButton
-                    onClick={() => onSelectRoom(room.id)}
-                    isActive={selectedRoomId === room.id}
-                    tooltip={room.name}
-                  >
-                    <span className="text-base">{room.emoji}</span>
-                    <span className="flex-1">{room.name}</span>
+                  <div className="flex items-center gap-1 w-full">
+                    <SidebarMenuButton
+                      onClick={() => onSelectRoom(room.id)}
+                      isActive={selectedRoomId === room.id}
+                      tooltip={room.name}
+                      className="flex-1"
+                    >
+                      <span className="text-base">{room.emoji}</span>
+                      <span className="flex-1">{room.name}</span>
+                      {!collapsed && (
+                        <span className="text-xs text-muted-foreground">
+                          {room.members.length}
+                        </span>
+                      )}
+                    </SidebarMenuButton>
                     {!collapsed && (
-                      <span className="text-xs text-muted-foreground">
-                        {room.memberCount}
-                      </span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 shrink-0"
+                        onClick={(e) => handleRoomInfo(room, e)}
+                      >
+                        <Info className="h-4 w-4" />
+                      </Button>
                     )}
-                  </SidebarMenuButton>
+                  </div>
                 </SidebarMenuItem>
               ))}
               {collapsed && (
@@ -156,6 +181,12 @@ export function DashboardSidebar({
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+
+      <RoomInfoDialog
+        open={roomInfoOpen}
+        onOpenChange={setRoomInfoOpen}
+        room={selectedRoom}
+      />
     </Sidebar>
   );
 }

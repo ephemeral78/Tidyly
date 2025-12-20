@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Task, Room } from "@/types";
+import { FirestoreTask, FirestoreRoom } from "@/types/firestore";
 import { TaskCard } from "./TaskCard";
 import { TaskFilters, FilterStatus, FilterPriority, SortOption } from "./TaskFilters";
 import { Button } from "@/components/ui/button";
@@ -7,11 +7,11 @@ import { Plus, Inbox } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface TaskListProps {
-  tasks: Task[];
-  rooms: Room[];
+  tasks: FirestoreTask[];
+  rooms: FirestoreRoom[];
   selectedRoomId: string | null;
   onComplete: (taskId: string) => void;
-  onEdit: (task: Task) => void;
+  onEdit: (task: FirestoreTask) => void;
   onDelete: (taskId: string) => void;
   onCreateTask: () => void;
 }

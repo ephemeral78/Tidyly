@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Task, Room, User, SubTask, TaskLabel } from "@/types";
+import { Task, SubTask, TaskLabel } from "@/types";
+import { FirestoreRoom, FirestoreUser, FirestoreTask } from "@/types/firestore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,10 +37,10 @@ import { cn } from "@/lib/utils";
 interface CreateTaskDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (task: Omit<Task, "id" | "createdAt" | "completed" | "completedAt">) => void;
-  rooms: Room[];
-  users: User[];
-  editTask?: Task | null;
+  onSave: (task: Partial<FirestoreTask>) => void;
+  rooms: FirestoreRoom[];
+  users: FirestoreUser[];
+  editTask?: FirestoreTask | null;
   defaultRoomId?: string | null;
 }
 
@@ -97,7 +98,7 @@ export function CreateTaskDialog({
       setTitle("");
       setDescription("");
       setRoomId(defaultRoomId || rooms[0]?.id || "");
-      setSelectedAssignees([users[0]?.id || ""]);
+      setSelectedAssignees([users[0]?.uid || ""]);
       setPriority("P2");
       setDueDate(new Date());
       setRepeat("none");
@@ -116,14 +117,14 @@ export function CreateTaskDialog({
     e.preventDefault();
     if (!title || !roomId || selectedAssignees.length === 0 || !dueDate) return;
 
-    const primaryAssignee = users.find((u) => u.id === selectedAssignees[0]);
+    const primaryAssignee = users.find((u) => u.uid === selectedAssignees[0]);
     
     onSave({
       title,
       description: description || undefined,
       roomId,
       assigneeId: selectedAssignees[0],
-      assigneeName: primaryAssignee?.name || "",
+      assigneeName: primaryAssignee?.displayName || "",
       assignees: selectedAssignees,
       priority,
       dueDate: dueDate.toISOString(),
@@ -316,17 +317,17 @@ export function CreateTaskDialog({
               <p className="text-sm text-muted-foreground">Who can do this task?</p>
               <div className="space-y-2 border rounded-md p-3">
                 {users.map((user) => (
-                  <div key={user.id} className="flex items-center space-x-2">
+                  <div key={user.uid} className="flex items-center space-x-2">
                     <Checkbox
-                      id={`assignee-${user.id}`}
-                      checked={selectedAssignees.includes(user.id)}
-                      onCheckedChange={() => toggleAssignee(user.id)}
+                      id={`assignee-${user.uid}`}
+                      checked={selectedAssignees.includes(user.uid)}
+                      onCheckedChange={() => toggleAssignee(user.uid)}
                     />
                     <label
-                      htmlFor={`assignee-${user.id}`}
+                      htmlFor={`assignee-${user.uid}`}
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                     >
-                      {user.name}
+                      {user.displayName}
                     </label>
                   </div>
                 ))}

@@ -34,15 +34,12 @@ export function CreateRoomDialog({ open, onOpenChange }: CreateRoomDialogProps) 
 
     setLoading(true);
     try {
-      const roomData = await createRoom({
-        name: formData.name.trim(),
-        emoji: formData.emoji,
-        description: formData.description.trim(),
-        ownerId: currentUser.uid,
-        members: [currentUser.uid],
-        createdAt: new Date(),
-        updatedAt: new Date()
-      });
+      const roomData = await createRoom(
+        formData.name.trim(),
+        formData.emoji,
+        currentUser.uid,
+        formData.description.trim() || ""
+      );
 
       toast.success(`Room "${formData.name}" created!`, {
         description: `Invite code: ${roomData.inviteCode}`

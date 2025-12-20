@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Task, Room, User } from "@/types";
+import { FirestoreTask, FirestoreRoom, FirestoreUser } from "@/types/firestore";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -8,9 +8,9 @@ import { Calendar, CheckCircle2, Clock, User as UserIcon } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 
 interface ActivityPageProps {
-  tasks: Task[];
-  rooms: Room[];
-  users: User[];
+  tasks: FirestoreTask[];
+  rooms: FirestoreRoom[];
+  users: FirestoreUser[];
 }
 
 export function ActivityPage({ tasks, rooms, users }: ActivityPageProps) {
@@ -36,7 +36,7 @@ export function ActivityPage({ tasks, rooms, users }: ActivityPageProps) {
     return room ? `${room.emoji} ${room.name}` : "Unknown";
   };
 
-  const getPriorityColor = (priority: Task["priority"]) => {
+  const getPriorityColor = (priority: FirestoreTask["priority"]) => {
     switch (priority) {
       case "P1":
         return "destructive";
@@ -81,8 +81,8 @@ export function ActivityPage({ tasks, rooms, users }: ActivityPageProps) {
           <SelectContent>
             <SelectItem value="all">All Users</SelectItem>
             {users.map((user) => (
-              <SelectItem key={user.id} value={user.id}>
-                {user.name}
+              <SelectItem key={user.uid} value={user.uid}>
+                {user.displayName}
               </SelectItem>
             ))}
           </SelectContent>

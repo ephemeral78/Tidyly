@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Task, Room, User } from "@/types";
+import { FirestoreTask, FirestoreRoom, FirestoreUser } from "@/types/firestore";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,9 +8,9 @@ import { CheckCircle2, Clock, TrendingUp, Award } from "lucide-react";
 import { format, subDays, startOfDay, endOfDay } from "date-fns";
 
 interface AnalyticsPageProps {
-  tasks: Task[];
-  rooms: Room[];
-  users: User[];
+  tasks: FirestoreTask[];
+  rooms: FirestoreRoom[];
+  users: FirestoreUser[];
 }
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
@@ -49,7 +49,7 @@ export function AnalyticsPage({ tasks, rooms, users }: AnalyticsPageProps) {
   // Completion rate by user
   const userStats = useMemo(() => {
     return users.map((user) => {
-      const userTasks = filteredTasks.filter((t) => t.assigneeId === user.id);
+      const userTasks = filteredTasks.filter((t) => t.assigneeId === user.uid);
       const completed = userTasks.filter((t) => t.completed).length;
       const total = userTasks.length;
       const points = userTasks
@@ -57,7 +57,8 @@ export function AnalyticsPage({ tasks, rooms, users }: AnalyticsPageProps) {
         .reduce((sum, t) => sum + (t.points || 0), 0);
 
       return {
-        name: user.name,
+        uid: user.uid,
+        name: user.displayName,
         completed,
         pending: total - completed,
         total,
@@ -268,7 +269,7 @@ export function AnalyticsPage({ tasks, rooms, users }: AnalyticsPageProps) {
                 {userStats
                   .sort((a, b) => b.points - a.points)
                   .map((user, index) => (
-                    <div key={user.name} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div key={user.uid} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                       <div className="flex items-center gap-3">
                         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold">
                           {index + 1}

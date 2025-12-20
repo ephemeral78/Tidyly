@@ -202,7 +202,7 @@ export const createRoom = async (
     id: roomId,
     name,
     emoji,
-    description,
+    description: description || "",
     ownerId,
     inviteCode,
     members: [ownerId],
@@ -308,12 +308,17 @@ export const getPendingRoomJoinRequests = async (ownerId: string): Promise<RoomJ
 };
 
 export const acceptRoomJoinRequest = async (requestId: string) => {
+  console.log('acceptRoomJoinRequest called with:', requestId);
   const requestRef = doc(db, 'roomJoinRequests', requestId);
   const requestSnap = await getDoc(requestRef);
   
-  if (!requestSnap.exists()) throw new Error('Request not found');
+  if (!requestSnap.exists()) {
+    console.error('Room join request not found:', requestId);
+    throw new Error('Request not found');
+  }
   
   const request = requestSnap.data() as RoomJoinRequest;
+  console.log('Room join request data:', request);
   
   const batch = writeBatch(db);
   
@@ -329,6 +334,7 @@ export const acceptRoomJoinRequest = async (requestId: string) => {
   
   if (roomSnap.exists()) {
     const roomData = roomSnap.data() as FirestoreRoom;
+    console.log('Adding user to room members:', request.userId, 'Room:', request.roomId);
     batch.update(roomRef, {
       members: [...roomData.members, request.userId],
       updatedAt: new Date().toISOString(),
@@ -341,13 +347,16 @@ export const acceptRoomJoinRequest = async (requestId: string) => {
   
   if (userSnap.exists()) {
     const userData = userSnap.data() as FirestoreUser;
+    console.log('Adding room to user rooms list:', request.roomId, 'User:', request.userId);
     batch.update(userRef, {
       rooms: [...userData.rooms, request.roomId],
       updatedAt: new Date().toISOString(),
     });
   }
   
+  console.log('Committing batch update...');
   await batch.commit();
+  console.log('Batch committed successfully');
 };
 
 export const rejectRoomJoinRequest = async (requestId: string) => {
@@ -460,6 +469,25 @@ export const subscribeToUserRooms = (
 };
 
 export const subscribeToRoomTasks = (
+  roomId: string,
+  callback: (tasks: FirestoreTask[]) => void
+) => {
+  const q = query(
+    collection(db, 'tasks'),
+    where('roomId', '==', roomId),
+    orderBy('createdAt', 'desc')
+  );
+  
+  return onSnapshot(q, (snapshot) => {
+    const tasks = snapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id
+    } as FirestoreTask));
+    callback(tasks);
+  });
+};
+
+export const subscribeToMultipleRoomTasks = (
   roomIds: string[],
   callback: (tasks: FirestoreTask[]) => void
 ) => {
@@ -470,11 +498,15 @@ export const subscribeToRoomTasks = (
   
   const q = query(
     collection(db, 'tasks'),
-    where('roomId', 'in', roomIds.slice(0, 10)) // Firestore limit
+    where('roomId', 'in', roomIds.slice(0, 10)), // Firestore limit
+    orderBy('createdAt', 'desc')
   );
   
   return onSnapshot(q, (snapshot) => {
-    const tasks = snapshot.docs.map((doc) => doc.data() as FirestoreTask);
+    const tasks = snapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id
+    } as FirestoreTask));
     callback(tasks);
   });
 };

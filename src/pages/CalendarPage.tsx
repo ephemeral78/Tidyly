@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Calendar as BigCalendar, dateFnsLocalizer, View } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale";
-import { Task, Room } from "@/types";
+import { FirestoreTask, FirestoreRoom } from "@/types/firestore";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -22,8 +22,8 @@ const localizer = dateFnsLocalizer({
 });
 
 interface CalendarPageProps {
-  tasks: Task[];
-  rooms: Room[];
+  tasks: FirestoreTask[];
+  rooms: FirestoreRoom[];
 }
 
 interface CalendarEvent {
@@ -31,7 +31,7 @@ interface CalendarEvent {
   title: string;
   start: Date;
   end: Date;
-  resource: Task;
+  resource: FirestoreTask;
 }
 
 export function CalendarPage({ tasks, rooms }: CalendarPageProps) {
