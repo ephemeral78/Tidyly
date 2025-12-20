@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { TaskList } from "@/components/dashboard/TaskList";
 import { CreateTaskDialog } from "@/components/dashboard/CreateTaskDialog";
+import { ActivityPage } from "@/pages/Activity";
+import { CalendarPage } from "@/pages/CalendarPage";
+import { AnalyticsPage } from "@/pages/AnalyticsPage";
 import { mockRooms, mockTasks, mockUsers } from "@/data/mockData";
 import { Task } from "@/types";
 import { useToast } from "@/hooks/use-toast";
@@ -110,15 +114,51 @@ export default function Dashboard() {
           <DashboardHeader />
 
           <main className="flex-1 p-6">
-            <TaskList
-              tasks={tasks}
-              rooms={rooms}
-              selectedRoomId={selectedRoomId}
-              onComplete={handleCompleteTask}
-              onEdit={handleEditTask}
-              onDelete={handleDeleteTask}
-              onCreateTask={handleOpenCreateDialog}
-            />
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <TaskList
+                    tasks={tasks.filter((t) => !t.completed)}
+                    rooms={rooms}
+                    selectedRoomId={selectedRoomId}
+                    onComplete={handleCompleteTask}
+                    onEdit={handleEditTask}
+                    onDelete={handleDeleteTask}
+                    onCreateTask={handleOpenCreateDialog}
+                  />
+                }
+              />
+              <Route
+                path="/activity"
+                element={
+                  <ActivityPage
+                    tasks={tasks}
+                    rooms={rooms}
+                    users={mockUsers}
+                  />
+                }
+              />
+              <Route
+                path="/calendar"
+                element={
+                  <CalendarPage
+                    tasks={tasks}
+                    rooms={rooms}
+                  />
+                }
+              />
+              <Route
+                path="/analytics"
+                element={
+                  <AnalyticsPage
+                    tasks={tasks}
+                    rooms={rooms}
+                    users={mockUsers}
+                  />
+                }
+              />
+            </Routes>
           </main>
         </div>
 

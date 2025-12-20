@@ -11,6 +11,7 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { createUserProfile, getUserProfile } from '@/lib/firestore';
 
 interface AuthContextType {
   currentUser: FirebaseUser | null;
@@ -40,6 +41,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     if (userCredential.user) {
       await updateProfile(userCredential.user, { displayName });
+      // Create Firestore user profile
+      await createUserProfile(
+        userCredential.user.uid,
+        email,
+        displayName,
+        userCredential.user.photoURL || null
+      );
     }
   };
 
@@ -53,7 +61,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+    
+    // Check if user profile exists, create if not
+    const profile = await getUserProfile(result.user.uid);
+    if (!profile) {
+      await createUserProfile(
+        result.user.uid,
+        result.user.email || '',
+        result.user.displayName || 'User',
+        result.user.photoURL || null
+      );
+    }
   };
 
   const resetPassword = async (email: string) => {
@@ -61,7 +80,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Ensure user profile exists in Firestore
+        const profile = await getUserProfile(user.uid);
+        if (!profile) {
+          await createUserProfile(
+            user.uid,
+            user.email || '',
+            user.displayName || 'User',
+            user.photoURL || null
+          );
+        }
+      }
       setCurrentUser(user);
       setLoading(false);
     });

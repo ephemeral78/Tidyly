@@ -67,7 +67,7 @@ export function HeroSection() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
         >
           <Button variant="hero" size="xl" asChild>
-            <a href="/dashboard">
+            <a href="/signup">
               Start for free
               <ArrowRight size={20} />
             </a>

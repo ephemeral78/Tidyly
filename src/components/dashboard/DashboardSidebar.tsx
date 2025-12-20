@@ -23,6 +23,7 @@ import {
   Users,
   LogOut,
   ChevronRight,
+  Activity,
 } from "lucide-react";
 import { Room } from "@/types";
 import { cn } from "@/lib/utils";
@@ -36,6 +37,7 @@ interface DashboardSidebarProps {
 
 const navItems = [
   { title: "All Tasks", icon: Home, path: "/dashboard" },
+  { title: "Activity", icon: Activity, path: "/dashboard/activity" },
   { title: "Calendar", icon: Calendar, path: "/dashboard/calendar" },
   { title: "Analytics", icon: BarChart3, path: "/dashboard/analytics" },
 ];
