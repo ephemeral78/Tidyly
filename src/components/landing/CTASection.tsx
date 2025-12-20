@@ -42,9 +42,12 @@ export function CTASection() {
               <Button 
                 size="xl" 
                 className="bg-background text-foreground hover:bg-background/90 shadow-lg"
+                asChild
               >
-                Get started for free
-                <ArrowRight size={20} />
+                <a href="/dashboard">
+                  Get started for free
+                  <ArrowRight size={20} />
+                </a>
               </Button>
               <Button 
                 size="xl" 
