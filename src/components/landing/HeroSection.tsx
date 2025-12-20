@@ -66,12 +66,14 @@ export function HeroSection() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
         >
-          <Button variant="hero" size="xl">
-            Start for free
-            <ArrowRight size={20} />
+          <Button variant="hero" size="xl" asChild>
+            <a href="/dashboard">
+              Start for free
+              <ArrowRight size={20} />
+            </a>
           </Button>
-          <Button variant="hero-outline" size="xl">
-            See how it works
+          <Button variant="hero-outline" size="xl" asChild>
+            <a href="#how-it-works">See how it works</a>
           </Button>
         </motion.div>
 

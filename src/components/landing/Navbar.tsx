@@ -44,11 +44,11 @@ export function Navbar() {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm">
-              Sign in
+            <Button variant="ghost" size="sm" asChild>
+              <a href="/dashboard">Sign in</a>
             </Button>
-            <Button variant="default" size="sm">
-              Get started
+            <Button variant="default" size="sm" asChild>
+              <a href="/dashboard">Get started</a>
             </Button>
           </div>
 
@@ -80,10 +80,12 @@ export function Navbar() {
                 </a>
               ))}
               <hr className="my-2 border-border" />
-              <Button variant="ghost" className="justify-start">
-                Sign in
+              <Button variant="ghost" className="justify-start" asChild>
+                <a href="/dashboard">Sign in</a>
               </Button>
-              <Button variant="default">Get started</Button>
+              <Button variant="default" asChild>
+                <a href="/dashboard">Get started</a>
+              </Button>
             </div>
           </motion.div>
         )}
