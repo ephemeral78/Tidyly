@@ -422,8 +422,11 @@ export function CreateTaskDialog({
                     <Input
                       type="number"
                       min="0"
-                      value={points}
-                      onChange={(e) => setPoints(parseInt(e.target.value) || 0)}
+                      value={points || ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setPoints(val === "" ? 0 : parseInt(val));
+                      }}
                       placeholder="Points..."
                     />
                   </div>

@@ -49,16 +49,6 @@ export function TaskFilters({
 
       {/* Filters */}
       <div className="flex items-center gap-2">
-        <Select value={status} onValueChange={(v) => onStatusChange(v as FilterStatus)}>
-          <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="completed">Completed</SelectItem>
-          </SelectContent>
-        </Select>
 
         <Select value={priority} onValueChange={(v) => onPriorityChange(v as FilterPriority)}>
           <SelectTrigger className="w-[120px]">

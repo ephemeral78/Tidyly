@@ -21,15 +21,46 @@ import { CreateRoomDialog } from "@/components/social/CreateRoomDialog";
 import { useState, useEffect } from "react";
 import { subscribeToFriendRequests, subscribeToRoomJoinRequests } from "@/lib/firestore";
 
-export function DashboardHeader() {
+interface DashboardHeaderProps {
+  createRoomOpen?: boolean;
+  joinRoomOpen?: boolean;
+  onCreateRoomOpenChange?: (open: boolean) => void;
+  onJoinRoomOpenChange?: (open: boolean) => void;
+}
+
+export function DashboardHeader({ 
+  createRoomOpen: externalCreateRoomOpen,
+  joinRoomOpen: externalJoinRoomOpen,
+  onCreateRoomOpenChange,
+  onJoinRoomOpenChange
+}: DashboardHeaderProps = {}) {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [addFriendOpen, setAddFriendOpen] = useState(false);
-  const [joinRoomOpen, setJoinRoomOpen] = useState(false);
+  const [internalJoinRoomOpen, setInternalJoinRoomOpen] = useState(false);
   const [myCodesOpen, setMyCodesOpen] = useState(false);
-  const [createRoomOpen, setCreateRoomOpen] = useState(false);
+  const [internalCreateRoomOpen, setInternalCreateRoomOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
+
+  const joinRoomOpen = externalJoinRoomOpen ?? internalJoinRoomOpen;
+  const createRoomOpen = externalCreateRoomOpen ?? internalCreateRoomOpen;
+
+  const setJoinRoomOpen = (open: boolean) => {
+    if (onJoinRoomOpenChange) {
+      onJoinRoomOpenChange(open);
+    } else {
+      setInternalJoinRoomOpen(open);
+    }
+  };
+
+  const setCreateRoomOpen = (open: boolean) => {
+    if (onCreateRoomOpenChange) {
+      onCreateRoomOpenChange(open);
+    } else {
+      setInternalCreateRoomOpen(open);
+    }
+  };
 
   useEffect(() => {
     if (!currentUser) return;

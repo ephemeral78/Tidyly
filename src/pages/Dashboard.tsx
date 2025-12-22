@@ -25,6 +25,8 @@ export default function Dashboard() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editTask, setEditTask] = useState<FirestoreTask | null>(null);
   const [loading, setLoading] = useState(true);
+  const [createRoomOpen, setCreateRoomOpen] = useState(false);
+  const [joinRoomOpen, setJoinRoomOpen] = useState(false);
 
   // Subscribe to user's rooms
   useEffect(() => {
@@ -183,7 +185,11 @@ export default function Dashboard() {
   };
 
   const handleCreateRoom = () => {
-    // Room creation is handled by CreateRoomDialog in DashboardHeader
+    setCreateRoomOpen(true);
+  };
+
+  const handleJoinRoom = () => {
+    setJoinRoomOpen(true);
   };
 
   const handleOpenCreateDialog = () => {
@@ -207,10 +213,16 @@ export default function Dashboard() {
           selectedRoomId={selectedRoomId}
           onSelectRoom={setSelectedRoomId}
           onCreateRoom={handleCreateRoom}
+          onJoinRoom={handleJoinRoom}
         />
 
         <div className="flex-1 flex flex-col">
-          <DashboardHeader />
+          <DashboardHeader 
+            createRoomOpen={createRoomOpen}
+            joinRoomOpen={joinRoomOpen}
+            onCreateRoomOpenChange={setCreateRoomOpen}
+            onJoinRoomOpenChange={setJoinRoomOpen}
+          />
 
           <main className="flex-1 p-6">
             <Routes>

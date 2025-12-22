@@ -1,14 +1,33 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Copy, Users, QrCode, Crown, Calendar } from "lucide-react";
+import { 
+  Copy, 
+  Users, 
+  QrCode, 
+  Crown, 
+  Calendar, 
+  UserMinus, 
+  DoorOpen,
+  AlertTriangle 
+} from "lucide-react";
 import { FirestoreRoom, FirestoreUser } from "@/types/firestore";
 import { useState, useEffect } from "react";
-import { getUserProfile } from "@/lib/firestore";
+import { getUserProfile, leaveRoom, removeMemberFromRoom } from "@/lib/firestore";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface RoomInfoDialogProps {
   open: boolean;
@@ -21,6 +40,9 @@ export function RoomInfoDialog({ open, onOpenChange, room }: RoomInfoDialogProps
   const [members, setMembers] = useState<FirestoreUser[]>([]);
   const [owner, setOwner] = useState<FirestoreUser | null>(null);
   const [loading, setLoading] = useState(false);
+  const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
+  const [kickDialogOpen, setKickDialogOpen] = useState(false);
+  const [memberToKick, setMemberToKick] = useState<FirestoreUser | null>(null);
 
   useEffect(() => {
     if (room && open) {
@@ -53,6 +75,39 @@ export function RoomInfoDialog({ open, onOpenChange, room }: RoomInfoDialogProps
       navigator.clipboard.writeText(room.inviteCode);
       toast.success("Invite code copied to clipboard!");
     }
+  };
+
+  const handleLeaveRoom = async () => {
+    if (!room || !currentUser) return;
+
+    try {
+      await leaveRoom(currentUser.uid, room.id);
+      toast.success("You have left the room");
+      onOpenChange(false);
+    } catch (error) {
+      console.error("Error leaving room:", error);
+      toast.error("Failed to leave room");
+    }
+  };
+
+  const handleKickMember = async () => {
+    if (!room || !currentUser || !memberToKick) return;
+
+    try {
+      await removeMemberFromRoom(room.id, memberToKick.uid, currentUser.uid);
+      toast.success(`${memberToKick.displayName} has been removed from the room`);
+      setKickDialogOpen(false);
+      setMemberToKick(null);
+      loadRoomMembers(); // Reload members list
+    } catch (error) {
+      console.error("Error removing member:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to remove member");
+    }
+  };
+
+  const openKickDialog = (member: FirestoreUser) => {
+    setMemberToKick(member);
+    setKickDialogOpen(true);
   };
 
   const getInitials = (name: string) => {
@@ -162,6 +217,17 @@ export function RoomInfoDialog({ open, onOpenChange, room }: RoomInfoDialogProps
                       {member.uid === room.ownerId && (
                         <Crown className="h-3 w-3 text-yellow-500" />
                       )}
+                      {/* Show kick button only for owner and not for themselves or owner */}
+                      {isOwner && member.uid !== currentUser?.uid && member.uid !== room.ownerId && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                          onClick={() => openKickDialog(member)}
+                        >
+                          <UserMinus className="h-4 w-4" />
+                        </Button>
+                      )}
                     </div>
                   ))
                 )}
@@ -180,7 +246,63 @@ export function RoomInfoDialog({ open, onOpenChange, room }: RoomInfoDialogProps
             </span>
           </div>
         </div>
+
+        {/* Leave Room Button - Only show if not the owner */}
+        {!isOwner && (
+          <DialogFooter>
+            <Button 
+              variant="destructive" 
+              onClick={() => setLeaveDialogOpen(true)}
+              className="w-full"
+            >
+              <DoorOpen className="h-4 w-4 mr-2" />
+              Leave Room
+            </Button>
+          </DialogFooter>
+        )}
       </DialogContent>
+
+      {/* Leave Room Confirmation Dialog */}
+      <AlertDialog open={leaveDialogOpen} onOpenChange={setLeaveDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              Leave Room?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to leave <strong>{room?.name}</strong>? You'll need a new invite code to rejoin.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleLeaveRoom} className="bg-destructive hover:bg-destructive/90">
+              Leave Room
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Kick Member Confirmation Dialog */}
+      <AlertDialog open={kickDialogOpen} onOpenChange={setKickDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <UserMinus className="h-5 w-5 text-destructive" />
+              Remove Member?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to remove <strong>{memberToKick?.displayName}</strong> from this room? They'll need a new invite to rejoin.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setMemberToKick(null)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleKickMember} className="bg-destructive hover:bg-destructive/90">
+              Remove Member
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 }

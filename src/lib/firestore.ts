@@ -367,6 +367,81 @@ export const rejectRoomJoinRequest = async (requestId: string) => {
   });
 };
 
+// Leave a room
+export const leaveRoom = async (userId: string, roomId: string) => {
+  const batch = writeBatch(db);
+  
+  // Remove room from user's rooms list
+  const userRef = doc(db, 'users', userId);
+  const userSnap = await getDoc(userRef);
+  
+  if (userSnap.exists()) {
+    const userData = userSnap.data() as FirestoreUser;
+    batch.update(userRef, {
+      rooms: userData.rooms.filter((id) => id !== roomId),
+      updatedAt: new Date().toISOString(),
+    });
+  }
+  
+  // Remove user from room members
+  const roomRef = doc(db, 'rooms', roomId);
+  const roomSnap = await getDoc(roomRef);
+  
+  if (roomSnap.exists()) {
+    const roomData = roomSnap.data() as FirestoreRoom;
+    batch.update(roomRef, {
+      members: roomData.members.filter((id) => id !== userId),
+      updatedAt: new Date().toISOString(),
+    });
+  }
+  
+  await batch.commit();
+};
+
+// Remove a member from a room (kick)
+export const removeMemberFromRoom = async (roomId: string, memberId: string, requestedBy: string) => {
+  const roomRef = doc(db, 'rooms', roomId);
+  const roomSnap = await getDoc(roomRef);
+  
+  if (!roomSnap.exists()) {
+    throw new Error('Room not found');
+  }
+  
+  const roomData = roomSnap.data() as FirestoreRoom;
+  
+  // Check if requester is the room owner
+  if (roomData.ownerId !== requestedBy) {
+    throw new Error('Only room owner can remove members');
+  }
+  
+  // Cannot remove the owner
+  if (memberId === roomData.ownerId) {
+    throw new Error('Cannot remove room owner');
+  }
+  
+  const batch = writeBatch(db);
+  
+  // Remove user from room members
+  batch.update(roomRef, {
+    members: roomData.members.filter((id) => id !== memberId),
+    updatedAt: new Date().toISOString(),
+  });
+  
+  // Remove room from user's rooms list
+  const userRef = doc(db, 'users', memberId);
+  const userSnap = await getDoc(userRef);
+  
+  if (userSnap.exists()) {
+    const userData = userSnap.data() as FirestoreUser;
+    batch.update(userRef, {
+      rooms: userData.rooms.filter((id) => id !== roomId),
+      updatedAt: new Date().toISOString(),
+    });
+  }
+  
+  await batch.commit();
+};
+
 // ============= TASK OPERATIONS =============
 
 export const createTask = async (taskData: Omit<FirestoreTask, 'id' | 'createdAt' | 'updatedAt'>): Promise<FirestoreTask> => {
