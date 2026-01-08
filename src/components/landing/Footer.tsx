@@ -29,9 +29,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2">
             <a href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">T</span>
-              </div>
+              <img src="/favicon.svg" alt="Tidyly" className="w-9 h-9 shrink-0" />
               <span className="font-semibold text-xl tracking-tight">Tidyly</span>
             </a>
             <p className="text-sm text-muted-foreground max-w-xs mb-4">

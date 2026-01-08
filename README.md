@@ -1,73 +1,135 @@
-# Welcome to your Lovable project
+# Tidyly
 
-## Project info
+A smart task management application designed for teams, households, and groups. Tidyly enables collaborative task management with intelligent assignment algorithms, flexible scheduling, and real-time synchronization.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Features
 
-## How can I edit this code?
+- **Collaborative Rooms**: Create shared spaces for teams, households, or friend groups
+- **Smart Task Assignment**: Automatic task rotation using round-robin, random, or least-busy algorithms
+- **Flexible Scheduling**: Support for recurring tasks with daily, weekly, monthly, or custom intervals
+- **Real-time Notifications**: Get reminded before, on, or after task due dates
+- **Activity Tracking**: Monitor progress and view analytics across your tasks and rooms
+- **User-friendly Interface**: Clean, modern design built with accessibility in mind
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Frontend Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **UI Components**: shadcn/ui (Radix UI primitives)
+- **Styling**: Tailwind CSS
+- **State Management**: TanStack Query (React Query)
+- **Routing**: React Router
+- **Authentication**: Firebase Auth
+- **Database**: Cloud Firestore
+- **Mobile**: Capacitor (Android support)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js 16.x or higher
+- npm or yarn package manager
 
-**Use your preferred IDE**
+## Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Clone the repository and install dependencies:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone <repository-url>
+cd Tidyly
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Firebase Setup
 
-# Step 3: Install the necessary dependencies.
-npm i
+1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com)
+2. Enable Authentication and Firestore Database
+3. Create a `.env` file in the root directory with your Firebase configuration:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```env
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
+
+Refer to `FIREBASE_SETUP.md` and `FIRESTORE_SETUP.md` for detailed configuration instructions.
+
+### Development
+
+Start the development server:
+
+```sh
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Building for Production
 
-**Use GitHub Codespaces**
+Create an optimized production build:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```sh
+npm run build
+```
 
-## What technologies are used for this project?
+Preview the production build locally:
 
-This project is built with:
+```sh
+npm run preview
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Linting
 
-## How can I deploy this project?
+Run ESLint to check code quality:
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```sh
+npm run lint
+```
 
-## Can I connect a custom domain to my Lovable project?
+## Mobile Development
 
-Yes, you can!
+This project includes Capacitor for native mobile support.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Android
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Build the Android app:
+
+```sh
+npm run build
+npx cap sync android
+npx cap open android
+```
+
+## Project Structure
+
+```
+src/
+├── components/       # Reusable UI components
+│   ├── auth/        # Authentication components
+│   ├── dashboard/   # Dashboard-specific components
+│   ├── landing/     # Landing page sections
+│   ├── social/      # Social features (rooms, friends)
+│   └── ui/          # Base UI components (shadcn/ui)
+├── contexts/        # React Context providers
+├── hooks/           # Custom React hooks
+├── lib/             # Utility functions and configurations
+├── pages/           # Page components (routes)
+└── types/           # TypeScript type definitions
+```
+
+## Deployment
+
+The application is configured for deployment on Vercel. Push to your main branch to trigger automatic deployments.
+
+For other platforms, build the project and serve the `dist` folder as a static site.
+
+## Contributing
+
+Contributions are welcome. Please ensure your code follows the existing style and passes linting checks before submitting a pull request.
+
+## License
+
+This project is private and proprietary.

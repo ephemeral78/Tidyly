@@ -23,9 +23,7 @@ export function Navbar() {
         <div className="glass-card rounded-2xl px-6 py-3 flex items-center justify-between">
           {/* Logo */}
           <a href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-sm group-hover:shadow-glow transition-shadow duration-300">
-              <span className="text-primary-foreground font-bold text-lg">T</span>
-            </div>
+            <img src="/favicon.svg" alt="Tidyly" className="w-9 h-9 shrink-0 group-hover:shadow-glow transition-shadow duration-300" />
             <span className="font-semibold text-xl tracking-tight">Tidyly</span>
           </a>
 
