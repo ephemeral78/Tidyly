@@ -5,7 +5,7 @@ A smart task management application designed for teams, households, and groups. 
 ## Features
 
 - **Collaborative Rooms**: Create shared spaces for teams, households, or friend groups
-- **Smart Task Assignment**: Automatic task rotation using round-robin, random, or least-busy algorithms
+- **Smart Task Assignment[TBD]**: Automatic task rotation using round-robin, random, or least-busy algorithms
 - **Flexible Scheduling**: Support for recurring tasks with daily, weekly, monthly, or custom intervals
 - **Real-time Notifications**: Get reminded before, on, or after task due dates
 - **Activity Tracking**: Monitor progress and view analytics across your tasks and rooms
