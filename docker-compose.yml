@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  tidyly:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    container_name: tidyly-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production

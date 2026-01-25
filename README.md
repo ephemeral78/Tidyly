@@ -289,18 +289,50 @@ Before setting up Tidyly locally, ensure you have:
    - Application will be available at `http://localhost:5173`
    - Hot reload enabled – changes reflect instantly
 
-#### Option 2: Using Docker (Future Enhancement)
+#### Option 2: Using Docker
 
-Docker support is planned for Tidyly to streamline development across different environments:
+Docker support is now available for both development and production environments:
 
-**Planned Docker Features:**
-- Dockerfile for Node.js environment
-- docker-compose.yml for multi-service setup
-- Isolated development environment
-- Easy team onboarding
-- Consistent "works on my machine" environment
+1. **Development Mode (with hot-reload)**
+   ```bash
+   # Build and run development container
+   docker-compose -f docker-compose.dev.yml up --build
+   ```
+   - Application available at `http://localhost:5173`
+   - Changes to code are reflected immediately (hot-reload)
+   - Uses volume mounting for live code updates
 
-Docker integration will be added in a future release. For now, use Node.js directly.
+2. **Production Mode (optimized build)**
+   ```bash
+   # Build and run production container
+   docker-compose up --build
+   ```
+   - Application available at `http://localhost:3000`
+   - Optimized nginx-served static build
+   - Production-ready configuration
+
+**Docker Files Included:**
+- `Dockerfile` - Multi-stage production build with nginx
+- `Dockerfile.dev` - Development environment with Vite dev server
+- `docker-compose.yml` - Production container orchestration
+- `docker-compose.dev.yml` - Development container orchestration
+- `nginx.conf` - Nginx configuration for SPA routing
+- `.dockerignore` - Excludes unnecessary files from Docker build
+
+**Common Docker Commands:**
+```bash
+# Start in detached mode (background)
+docker-compose up -d
+
+# Stop containers
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Rebuild after dependency changes
+docker-compose up --build
+```
 
 ### Useful Development Commands
 
