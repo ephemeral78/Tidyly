@@ -7,19 +7,28 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node modules
 node_modules
+
+# Build outputs
 dist
 dist-ssr
 *.local
+build
+out
 
 # Environment variables
 .env
 .env.local
 .env.*.local
+.env.production.local
+.env.development.local
+.env.test.local
 
-# Editor directories and files
+# IDE and Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 .DS_Store
 *.suo
@@ -27,5 +36,87 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.iml
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode-test
+
+# IDE - VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IDE - WebStorm
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Vercel
 .vercel
-.env*.local
+
+# Docker
+Docker.local
+.dockerignore
+docker-compose.local.yml
+
+# OS-specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Lock files (optional - uncomment if you want to ignore)
+# package-lock.json
+# yarn.lock
+
+# Android
+.gradle
+build/
+.idea/
+.classpath
+.project
+.settings/
+.vscode/
+*.apk
+*.aar
+*.ap_
+*.aab
+*.so
+*.jks
+*.keystore
+local.properties
+key.properties
+
+# Firebase emulator
+.firebase/
+.firebaserc
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~
+
+# Dependencies
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
