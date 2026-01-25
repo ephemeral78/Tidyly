@@ -2,6 +2,137 @@
 
 A smart task management application designed for teams, households, and groups. Tidyly enables collaborative task management with intelligent assignment algorithms, flexible scheduling, and real-time synchronization.
 
+## Vision Document
+
+### Project Name & Overview
+
+**Tidyly** is a collaborative task management platform that empowers teams, households, and friend groups to organize, assign, and track tasks efficiently. By combining intelligent task distribution algorithms with a user-friendly interface, Tidyly transforms task management from a tedious individual responsibility into a streamlined collaborative experience.
+
+### Problem It Solves
+
+1. **Task Assignment Chaos**: Households and teams struggle with fairly and efficiently distributing tasks among members, often leading to forgotten responsibilities and conflicts.
+2. **Lack of Visibility**: Without a centralized system, task progress and accountability become opaque, making it difficult to track who is responsible for what.
+3. **Poor Coordination**: Multiple separate task lists and communication channels lead to duplicated efforts and missed deadlines.
+4. **No Intelligent Distribution**: Manual task assignment is time-consuming and prone to unfairness (some members consistently assigned more or less work).
+5. **Limited Recurring Task Support**: Most tools lack sophisticated scheduling for recurring tasks with various intervals and smart rotation mechanisms.
+
+### Target Users (Personas)
+
+1. **The Household Manager**
+   - Lives with family or roommates (2-8 people)
+   - Spends significant time coordinating household chores
+   - Values fairness and equal distribution of responsibilities
+   - Wants real-time visibility into task completion
+   - Uses mobile devices on-the-go for quick updates
+
+2. **The Team Lead**
+   - Manages small to medium-sized teams (5-20 people)
+   - Needs to distribute work based on member workload and skills
+   - Requires task analytics and progress tracking
+   - Values automated workflows to reduce administrative overhead
+   - Operates primarily on desktop but needs mobile support
+
+3. **The Friend Group Organizer**
+   - Coordinates events and responsibilities among close friends
+   - Wants a casual yet reliable way to track shared activities
+   - Needs simple, intuitive tools without complexity
+   - Prefers mobile-first interaction
+   - Values real-time notifications to keep everyone informed
+
+### Vision Statement
+
+"Empower collaborative groups to organize their work fairly and efficiently, eliminating task management friction through intelligent automation, transparent communication, and accessible design."
+
+### Key Features / Goals
+
+#### Phase 1 (Current - MVP)
+- ✅ **Collaborative Rooms**: Create and manage shared workspaces for different groups
+- ✅ **User Management**: Add members and manage room access and permissions
+- ✅ **Basic Task Creation**: Create tasks with titles, descriptions, and due dates
+- ✅ **Task Assignment**: Manually assign tasks to room members
+- 🔄 **Real-time Synchronization**: Live updates across all connected devices (via Firestore)
+- 🔄 **User-friendly Interface**: Clean, modern, accessible UI built with React and shadcn/ui
+
+#### Phase 2 (Development)
+- ⏳ **Smart Task Assignment**: Implement round-robin, random, and least-busy algorithms
+- ⏳ **Recurring Tasks**: Add daily, weekly, monthly, and custom recurring task support
+- ⏳ **Activity Analytics**: Dashboard showing task completion rates and member contributions
+- ⏳ **Real-time Notifications**: Push notifications for task assignments and deadlines
+- ⏳ **Mobile App (Android)**: Full Android application via Capacitor
+
+#### Phase 3 (Future)
+- 📋 **Advanced Analytics**: Detailed insights on team productivity and patterns
+- 📋 **Task Templates**: Pre-configured task sets for common scenarios
+- 📋 **Integration Support**: Connect with calendar systems, Slack, email
+- 📋 **Subtasks & Dependencies**: Complex task hierarchies and ordering
+- 📋 **Priority Levels & Categories**: Enhanced task organization
+- 📋 **iOS Support**: Native iOS application
+- 📋 **Team Permissions**: Granular role-based access control
+
+### Success Metrics
+
+#### User Engagement
+- Active daily users (DAU) and monthly active users (MAU)
+- Average session duration and frequency
+- Feature adoption rate (% of users utilizing smart assignment, recurring tasks, etc.)
+- Room creation and member invitation rates
+
+#### Task Management Effectiveness
+- Average task completion rate per room
+- Time-to-completion for assigned tasks
+- Task assignment fairness index (deviation from equal distribution)
+- Recurring task execution consistency
+
+#### User Satisfaction
+- Net Promoter Score (NPS) and user satisfaction surveys
+- Support ticket volume and resolution time
+- Feature request tracking and implementation rate
+- Retention rate (30-day, 60-day, 90-day)
+
+#### Technical Performance
+- App load time and responsiveness
+- Real-time sync latency (< 1 second target)
+- System uptime (99.9% target)
+- User-reported bugs and crash rates
+
+#### Growth Metrics
+- User sign-up and onboarding completion rate
+- Average room size and member retention
+- Viral coefficient (invitations per user)
+- Conversion metrics (freemium to premium if applicable)
+
+### Assumptions & Constraints
+
+#### Key Assumptions
+1. **User Groups are Small**: Target audience operates in groups of 2-20 people (not enterprise-scale)
+2. **Mobile-First Adoption**: Users will primarily interact via mobile devices, especially households
+3. **Recurring Tasks are Common**: Recurring and rotating tasks are a primary use case
+4. **Cloud Storage is Acceptable**: Users trust cloud-based data storage (Firebase)
+5. **Real-time Sync is Valued**: Users appreciate instant updates across devices
+6. **Collaborative Mindset**: Users are willing to share task visibility with their group
+7. **Accessibility Matters**: Users include people with varying technical proficiency
+
+#### Technical Constraints
+- **Firebase Limits**: Firestore has read/write quotas (millions per day for Spark plan)
+- **Real-time Updates**: Browser/network latency affects synchronization (target: <1 second)
+- **Platform Coverage**: Initial focus on web and Android; iOS support in Phase 3
+- **Authentication**: Firebase Auth limits concurrent sessions and OAuth providers
+- **Storage**: Firestore database size limits apply; long-term archiving needed for historical data
+- **Mobile Performance**: React on mobile (via Capacitor) has performance constraints
+
+#### Business/Organizational Constraints
+- **Team Size**: Limited development team; prioritize MVP features
+- **Budget**: Deployment costs on Vercel and Firebase (free tier available)
+- **Timeline**: Iterative development with quarterly milestones
+- **Privacy**: Compliance with data privacy regulations (GDPR considerations)
+- **Support**: Community-driven support initially; dedicated support in later phases
+
+#### Market Constraints
+- **Competition**: Established players (Todoist, Microsoft To Do, Asana) have feature-rich offerings
+- **Differentiation**: Must emphasize collaborative, fair task distribution and simplicity
+- **Pricing Model**: Freemium or free approach needed to gain traction
+- **Localization**: English-only initially; multi-language support later
+
 ## Features
 
 - **Collaborative Rooms**: Create shared spaces for teams, households, or friend groups
