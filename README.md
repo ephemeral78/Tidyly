@@ -133,6 +133,302 @@ A smart task management application designed for teams, households, and groups. 
 - **Pricing Model**: Freemium or free approach needed to gain traction
 - **Localization**: English-only initially; multi-language support later
 
+## Repository Organization & Setup
+
+### Folder Structure
+
+The Tidyly repository is organized for clarity and maintainability:
+
+```
+Tidyly/
+├── src/                    # Frontend source code
+│   ├── components/         # Reusable React components
+│   │   ├── auth/          # Authentication-related components
+│   │   ├── dashboard/     # Dashboard view components
+│   │   ├── landing/       # Landing page sections
+│   │   ├── social/        # Room and friend features
+│   │   └── ui/            # Base UI components (shadcn/ui)
+│   ├── contexts/          # React Context providers for state management
+│   ├── hooks/             # Custom React hooks
+│   ├── lib/               # Utility functions and Firebase configuration
+│   ├── pages/             # Page-level components (routes)
+│   ├── types/             # TypeScript type definitions
+│   ├── App.tsx            # Main App component
+│   └── main.tsx           # Application entry point
+├── android/               # Android native code (Capacitor)
+├── public/                # Static assets
+├── .gitignore             # Git ignore rules
+├── .env.example           # Environment variables template
+├── package.json           # Dependencies and scripts
+├── tsconfig.json          # TypeScript configuration
+├── vite.config.ts         # Vite bundler configuration
+├── tailwind.config.ts     # Tailwind CSS configuration
+├── capacitor.config.ts    # Capacitor (mobile) configuration
+└── README.md              # This file
+```
+
+### .gitignore
+
+A comprehensive `.gitignore` file is included to prevent tracking of:
+- Dependency directories (`node_modules/`)
+- Build artifacts (`dist/`, `build/`)
+- Environment files (`.env`, `.env.local`)
+- IDE configurations (`.vscode/`, `.idea/`)
+- OS-specific files (`.DS_Store`, `Thumbs.db`)
+- Docker artifacts (`Docker.local`, `.dockerignore`)
+- Build/cache files (`*.log`, `*.tmp`)
+- Firebase emulator data
+- Android build artifacts
+
+## Branching Strategy
+
+Tidyly follows **GitHub Flow**, a lightweight and effective branching strategy:
+
+### How It Works
+
+1. **Main Branch (`main`)**: Always production-ready
+   - Protected branch
+   - All code must pass tests and code review
+   - Automatically deployed to production
+
+2. **Feature Branches**: Created from `main`
+   - Naming convention: `feature/feature-name` or `fix/issue-name`
+   - Example: `feature/smart-task-assignment`, `fix/notification-bug`
+   - Work on your feature, push commits regularly
+
+3. **Pull Requests (PRs)**
+   - Create a PR when your feature is ready for review
+   - Write clear descriptions of changes
+   - Ensure CI/CD checks pass
+   - Request code review from team members
+   - Address feedback and make updates
+   - Merge to `main` after approval
+
+4. **After Merge**
+   - Delete the feature branch
+   - Monitor deployment to production
+   - Be ready to revert if issues arise
+
+### Branch Naming Conventions
+
+```
+feature/description        # New features
+fix/description            # Bug fixes
+docs/description           # Documentation updates
+refactor/description       # Code refactoring
+test/description           # Test additions
+chore/description          # Maintenance tasks
+```
+
+### Example Workflow
+
+```bash
+# 1. Create and switch to a new feature branch
+git checkout -b feature/smart-assignment
+
+# 2. Make changes and commit
+git add .
+git commit -m "Implement smart task assignment algorithm"
+
+# 3. Push to GitHub
+git push origin feature/smart-assignment
+
+# 4. Create a Pull Request on GitHub
+# 5. Address code review feedback
+# 6. Merge when approved
+# 7. Delete the feature branch
+```
+
+## Quick Start – Local Development
+
+### Prerequisites
+
+Before setting up Tidyly locally, ensure you have:
+
+- **Node.js 16.x or higher** ([Download](https://nodejs.org/))
+- **npm or yarn** (comes with Node.js)
+- **Git** ([Download](https://git-scm.com/))
+- **Firebase Account** ([Create Free Account](https://firebase.google.com/))
+
+### Development Environment Setup
+
+#### Option 1: Using Node.js (Recommended for Development)
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ephemeral78/Tidyly.git
+   cd Tidyly
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Set up environment variables**
+   - Copy `.env.example` to `.env.local`:
+     ```bash
+     cp .env.example .env.local
+     ```
+   - Fill in your Firebase configuration:
+     ```
+     VITE_FIREBASE_API_KEY=your_api_key
+     VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+     VITE_FIREBASE_PROJECT_ID=your_project_id
+     VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+     VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+     VITE_FIREBASE_APP_ID=your_app_id
+     ```
+
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
+   - Application will be available at `http://localhost:5173`
+   - Hot reload enabled – changes reflect instantly
+
+#### Option 2: Using Docker (Future Enhancement)
+
+Docker support is planned for Tidyly to streamline development across different environments:
+
+**Planned Docker Features:**
+- Dockerfile for Node.js environment
+- docker-compose.yml for multi-service setup
+- Isolated development environment
+- Easy team onboarding
+- Consistent "works on my machine" environment
+
+Docker integration will be added in a future release. For now, use Node.js directly.
+
+### Useful Development Commands
+
+```bash
+# Development server (hot reload)
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build locally
+npm run preview
+
+# Run linting (ESLint)
+npm run lint
+
+# Run linting with auto-fix
+npm run lint -- --fix
+
+# Type checking (TypeScript)
+npm run type-check
+
+# Format code (if Prettier is configured)
+npm run format
+```
+
+## Local Development Tools
+
+Tidyly uses industry-standard tools for development, code quality, and deployment:
+
+### Core Technologies
+
+| Tool | Purpose | Version |
+|------|---------|----------|
+| **Node.js** | JavaScript runtime | 16.x or higher |
+| **npm/yarn** | Package manager | Latest |
+| **TypeScript** | Static typing | ^5.0 |
+| **React** | UI framework | 18+ |
+| **Vite** | Build tool & dev server | ^5.0 |
+
+### UI & Styling
+
+| Tool | Purpose |
+|------|----------|
+| **shadcn/ui** | Pre-built component library |
+| **Radix UI** | Headless UI components |
+| **Tailwind CSS** | Utility-first CSS framework |
+| **PostCSS** | CSS processing |
+
+### State Management & Data Fetching
+
+| Tool | Purpose |
+|------|----------|
+| **TanStack Query** | Server state management |
+| **React Router** | Client-side routing |
+| **React Context** | Global state management |
+| **Firebase SDK** | Backend services |
+
+### Development & Quality Tools
+
+| Tool | Purpose |
+|------|----------|
+| **ESLint** | Code quality & style enforcement |
+| **TypeScript** | Type safety |
+| **Git Hooks** | Pre-commit checks (when configured) |
+| **GitHub Actions** | CI/CD automation |
+
+### Backend & Database
+
+| Tool | Purpose |
+|------|----------|
+| **Firebase Auth** | User authentication |
+| **Cloud Firestore** | Real-time database |
+| **Firebase Storage** | File storage (when needed) |
+
+### Deployment
+
+| Tool | Purpose |
+|------|----------|
+| **Vercel** | Web hosting & auto-deployment |
+| **Capacitor** | Mobile app framework |
+| **Android Studio** | Android development |
+
+### Recommended IDE & Extensions
+
+**VS Code** is recommended with these extensions:
+- ES7+ React/Redux/React-Native snippets
+- ESLint
+- Prettier - Code formatter
+- Tailwind CSS IntelliSense
+- TypeScript Vue Plugin
+- Debugger for Chrome
+- Thunder Client (REST API testing)
+
+### Setting Up Your Development Environment
+
+1. **Install Node.js** from [nodejs.org](https://nodejs.org/)
+2. **Clone the repository** and install dependencies:
+   ```bash
+   git clone https://github.com/ephemeral78/Tidyly.git
+   cd Tidyly
+   npm install
+   ```
+3. **Configure environment variables** (see Quick Start section above)
+4. **Install recommended VS Code extensions**
+5. **Start developing** with `npm run dev`
+
+### Troubleshooting Common Issues
+
+**Problem: Modules not found**
+```bash
+# Solution: Reinstall node_modules
+rm -rf node_modules package-lock.json
+npm install
+```
+
+**Problem: Port 5173 already in use**
+```bash
+# Solution: Use different port
+npm run dev -- --port 5174
+```
+
+**Problem: Firebase connection errors**
+- Verify `.env.local` has correct Firebase credentials
+- Check Firebase Console for authentication and Firestore enablement
+- Ensure API keys are not exposed in client code
+
+
 ## Features
 
 - **Collaborative Rooms**: Create shared spaces for teams, households, or friend groups
