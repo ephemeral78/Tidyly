@@ -167,6 +167,31 @@ Tidyly/
 └── README.md              # This file
 ```
 
+## 🎨 Software Design
+
+Tidyly uses a **Layered Client-Server architecture** with four distinct layers: Presentation (React components), State/Context (AuthContext, WorkspaceContext), Service/Abstraction (firestore.ts, auth.ts), and Infrastructure (Firebase). All Firebase interactions are encapsulated behind a service abstraction layer, keeping UI components decoupled from any specific backend provider. The UI is built with shadcn/ui and Tailwind CSS, following principles of low coupling, high cohesion, and progressive disclosure to deliver a clean and collaborative user experience.
+
+### Architecture Diagram
+
+![Tidyly Architecture Diagram](design/architecture-diagram.png)
+
+> Full diagram source: [`design/architecture-diagram.drawio`](design/architecture-diagram.drawio)
+
+### UI Screens (Figma)
+
+| Screen | Preview |
+|--------|---------|
+| Landing Page | ![Landing](design/figma-screenshots/01-landing.png) |
+| Authentication | ![Auth](design/figma-screenshots/02-auth.png) |
+| Dashboard | ![Dashboard](design/figma-screenshots/03-dashboard.png) |
+| Task Dialog | ![Task Dialog](design/figma-screenshots/04-task-dialog.png) |
+| Analytics | ![Analytics](design/figma-screenshots/05-analytics.png) |
+| Social / Workspaces | ![Social](design/figma-screenshots/06-social.png) |
+
+### Further Reading
+
+📄 Full Software Design Document: [`Tidyly_Software_Design_Document.docx`](Tidyly_Software_Design_Document.docx)
+
 ### .gitignore
 
 A comprehensive `.gitignore` file is included to prevent tracking of:
@@ -560,23 +585,6 @@ Build the Android app:
 npm run build
 npx cap sync android
 npx cap open android
-```
-
-## Project Structure
-
-```
-src/
-├── components/       # Reusable UI components
-│   ├── auth/        # Authentication components
-│   ├── dashboard/   # Dashboard-specific components
-│   ├── landing/     # Landing page sections
-│   ├── social/      # Social features (rooms, friends)
-│   └── ui/          # Base UI components (shadcn/ui)
-├── contexts/        # React Context providers
-├── hooks/           # Custom React hooks
-├── lib/             # Utility functions and configurations
-├── pages/           # Page components (routes)
-└── types/           # TypeScript type definitions
 ```
 
 ## Deployment
