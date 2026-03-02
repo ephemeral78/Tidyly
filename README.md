@@ -181,12 +181,12 @@ Tidyly uses a **Layered Client-Server architecture** with four distinct layers: 
 
 | Screen | Preview |
 |--------|---------|
-| Landing Page | ![Landing](design/figma-screenshots/01-landing.png) |
-| Authentication | ![Auth](design/figma-screenshots/02-auth.png) |
-| Dashboard | ![Dashboard](design/figma-screenshots/03-dashboard.png) |
-| Task Dialog | ![Task Dialog](design/figma-screenshots/04-task-dialog.png) |
-| Analytics | ![Analytics](design/figma-screenshots/05-analytics.png) |
-| Social / Workspaces | ![Social](design/figma-screenshots/06-social.png) |
+| Landing Page | ![Landing](design/01-landing.png) |
+| Authentication | ![Auth](design/02-auth.png) |
+| Dashboard | ![Dashboard](design/03-dashboard.png) |
+| Task Dialog | ![Task Dialog](design/04-task-dialog.png) |
+| Analytics | ![Analytics](design/05-analytics.png) |
+| Social / Workspaces | ![Social](design/06-social.png) |
 
 ### Further Reading
 
